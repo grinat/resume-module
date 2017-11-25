@@ -1,0 +1,18 @@
+.resume-update .update-resume-suggestions{
+    position: absolute;
+    background: #fff;
+    width: inherit;
+    border: 2px solid #eee;
+    margin: -10px 0;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.resume-update .blank-competence-form {
+    display: none;
+}
+
+.resume-update .resume-competence-item .form-group{
+    width: 50%;
+    float:left;
+}

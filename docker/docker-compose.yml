@@ -1,0 +1,55 @@
+version: '2'
+services:
+  nginx.resume-web-service:
+    container_name: resume-web-service-nginx
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "3001:80"
+    volumes:
+      - ${MAIN_PATH}/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ${MAIN_PATH}/docker/logs/nginx:/var/log/nginx
+    volumes_from:
+      - php.resume-web-service
+    networks:
+      - resume-web-service-network
+  php.resume-web-service:
+    container_name: resume-web-service-php
+    restart: always
+    build:
+        context: ./php
+        dockerfile: Dockerfile
+    volumes:
+      - ${MAIN_PATH}:/var/www/html
+      - ${MAIN_PATH}/docker/logs/php:/var/log/php7
+      - ${MAIN_PATH}/docker/php/php-fpm.conf:/etc/php7/php-fpm.conf
+    networks:
+      - resume-web-service-network
+  postgres.resume-web-service:
+    container_name: resume-web-service-postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=resume-web-service
+      - POSTGRES_USER=grinat
+      - POSTGRES_PASSWORD=Pos_251^73vwuOpx
+    volumes:
+# Для linux
+#      - ${MAIN_PATH}/docker/data/postgresql:/var/lib/postgresql/data
+# Для linux end
+# Для windows
+# 1. docker volume create --name postgres-data-resume-web-service -d local
+# 2. - postgres-data-resume-web-service:/var/lib/postgresql/data
+      - postgres-data-resume-web-service:/var/lib/postgresql:Z
+# Для windows end
+      - ${MAIN_PATH}/docker/logs/postgresql:/var/log/postgresql
+    networks:
+      - resume-web-service-network     
+networks:
+  resume-web-service-network:
+  
+volumes:
+# Для windows
+  postgres-data-resume-web-service:
+    external: true
+# Для windows end
