@@ -48,7 +48,7 @@ services:
 networks:
   resume-web-service-network:
   
-volumes:
+# volumes:
 # Для windows
 #  postgres-data-resume-web-service:
 #    external: true
