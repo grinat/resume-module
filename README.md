@@ -38,7 +38,7 @@ php /var/www/html/yii migrate --migrationPath=@app/modules/resume/migrations
 ~~~
 docker volume create --name postgres-data-resume-web-service -d local
 ~~~
-Если linux, то закомментировать/удалить все где указано # Для windows и расскоментировать Для linux
+И закомментировать/удалить все где указано # Для Linux и расскоментировать # Для Windows в docker-compose.yml
 
 4. 
 ~~~

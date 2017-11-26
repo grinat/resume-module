@@ -3,8 +3,7 @@ namespace app\modules\resume;
 
 use yii\base\BootstrapInterface;
 
-/*
- * Тестовое задание
+/**
   Задача
   Необходимо создать веб-сервис для сохранения, просмотра и удаления резюме.
   Резюме состоит из двух текстовых полей(название, описание) и списка компетенций.
@@ -17,7 +16,7 @@ use yii\base\BootstrapInterface;
   PHP 5/7, PostgreSQL, Yii2, отформатированный и понятный код.
   Можно использовать любые сторонние компоненты.
  */
-
+ 
 class Module extends \yii\base\Module implements BootstrapInterface
 {
 
@@ -28,7 +27,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
             'resume/resume/create' => 'resume/resume/create',
             'resume/resume/view/<id:[0-9]+>' => 'resume/resume/view',
             'resume/resume/update/<id:[0-9]+>' => 'resume/resume/update',
-            'resume/resume/delete/<id:[0-9]+>' => 'resume/resume/delete'
+            'resume/resume/delete/<id:[0-9]+>' => 'resume/resume/delete',
+            'GET resume/competence-suggestion/index' => 'resume/competence-suggestion/index',
         ], true);
     }
 }

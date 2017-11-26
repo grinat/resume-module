@@ -5,16 +5,21 @@
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 use yii\grid\GridView;
-use app\modules\resume\widgets\topMenu\TopMenuWidget;
+use yii\helpers\Html;
+use app\modules\resume\ModuleAsset;
+
+ModuleAsset::register($this);
 
 $this->title = 'Список резюме';
 ?>
 
-<?= TopMenuWidget::widget() ?>
+<?= $this->render('breadcrumbBlock') ?>
 
 <div class="resume-index">
+    <?= Html::a('Добавить резюме', ['/resume/resume/create'], ['class'=>'btn btn-default pull-right']) ?>
+    
     <h1><?= $this->title ?></h1>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -23,10 +28,11 @@ $this->title = 'Список резюме';
             'description',
             'actions' => [
                 'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['class' => 'actions'],
+                'headerOptions' => ['class' => 'actions'],
                 'header' => 'Действия',
                 'template' => '{view} {update} {delete}',
             ]
         ],
-    ])
-    ?>
+    ]) ?>
 </div>    

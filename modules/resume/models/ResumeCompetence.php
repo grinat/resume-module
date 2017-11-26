@@ -13,7 +13,6 @@ use yii\db\ActiveRecord;
 class ResumeCompetence extends ActiveRecord{
     
     const RAITING_RANGE = [1,2,3,4,5];
-    const MAX_SUGGESTIONS = 100;
     
     public static function tableName()
     {
@@ -45,17 +44,6 @@ class ResumeCompetence extends ActiveRecord{
             $list[$value] = $value;
         }
         return $list;
-    }
-    
-    public function getSuggestionsList(){
-        $list = static::find()
-                ->select('title')
-                ->groupBy('title')
-                ->limit(static::MAX_SUGGESTIONS)
-                ->asArray()
-                ->all();
-        
-        return $list;       
     }
 
 }

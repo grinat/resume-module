@@ -7,7 +7,7 @@ class ModuleAsset extends AssetBundle
 {
     public $sourcePath = '@app/modules/resume/assets';
     
-    public $publishOptions = ['forceCopy' => true];
+    public $publishOptions = ['forceCopy' => (YII_ENV === 'dev')];
 
     public $css = [
         'resume.css'

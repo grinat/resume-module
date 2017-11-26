@@ -24,7 +24,7 @@ class Resume extends ActiveRecord{
             ['title', 'trim'],
             [['title','description'], 'required'],
             [['title','description'], 'app\modules\resume\validators\PurifyFilter'],
-            [['title','description'], 'string', 'min' => 3, 'max' => 200],
+            [['title'], 'string', 'min' => 3, 'max' => 200],
             [['description'], 'string', 'min' => 3],
         ];
     }
@@ -47,8 +47,12 @@ class Resume extends ActiveRecord{
         $query = static::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ]
+            ]
         ]);
-        $query->with('resumeCompetencies');
         
         return $dataProvider;
     }

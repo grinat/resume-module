@@ -5,18 +5,23 @@ namespace app\modules\resume\forms;
 use yii\base\Model;
 use app\modules\resume\models\Resume;
 use app\modules\resume\models\ResumeCompetence;
+use yii\base\InvalidCallException;
 
-class ResumeUpdate extends Model{
+/**
+ * Форма добавления/обновления резюме
+ * обрабатывающая связанные модели
+ */
+class ResumeUpdate{
     
     /**
      *  \app\modules\resume\models\ResumeCompetence[]
      */
-    public $resumeCompetencies = [];
+    public $resumeCompetencies = null;
     
     /**
      *  \app\modules\resume\models\Resume
      */
-    public $resume;
+    public $resume = null;
     
     public $validationFailed = false;
 
@@ -54,13 +59,18 @@ class ResumeUpdate extends Model{
                 if(is_array($valArr)){
                     foreach($valArr as $key => $val){
                         $convertedArr[$key][$attr] = $val;
-                    }
+                    } 
                 }
             }
         } 
         return $convertedArr;
     }
     
+    /**
+     * @param type $inputData
+     * @param type $formName
+     * @return boolean
+     */
     public function loadResumeCompetencies($inputData, $formName){
         $convertedArr = $this->convertInputData($inputData, $formName);
                 
@@ -86,6 +96,10 @@ class ResumeUpdate extends Model{
     }
 
     public function save(){
+        
+        if(is_array($this->resumeCompetencies) === false || ($this->resume instanceof Resume) === false){
+            throw new InvalidCallException('resumeCompetencies must be an array, resume must be instanceof Resume');
+        }
         
         if(!($this->resume->validate() & Model::validateMultiple($this->resumeCompetencies))){
             $this->validationFailed = true;

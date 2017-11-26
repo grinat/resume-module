@@ -1,18 +1,48 @@
 .resume-update .update-resume-suggestions{
     position: absolute;
-    background: #fff;
-    width: inherit;
-    border: 2px solid #eee;
+    background: none;
+    width: 100%;
     margin: -10px 0;
-    max-height: 200px;
-    overflow-y: scroll;
+    z-index: 10;
 }
-
+.resume-update .update-resume-suggestions .items{
+    background: #fff;
+    margin-right: 30px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    z-index: 11;
+}
+.resume-update .update-resume-suggestions span{
+    display: block;
+    cursor: pointer;
+    padding: 5px 15px;
+    overflow: hidden;
+}
+.resume-update .update-resume-suggestions span:hover{
+    display: block;
+    background: #eee;
+}
+.resume-update .resume-competencies{
+    padding-top: 5px;
+}
 .resume-update .blank-competence-form {
     display: none;
 }
 
-.resume-update .resume-competence-item .form-group{
-    width: 50%;
-    float:left;
+.resume-index td.actions, .resume-index th.actions{
+    width: 70px;
+    text-align: center;
+}
+
+.resume-view th.raiting, .resume-view td.raiting{
+    width: 70px;
+    text-align: center;
 }

@@ -2,39 +2,32 @@
 
 /* @var $this yii\web\View */
 /* @var $model \app\modules\resume\models\Resume */
+use app\modules\resume\ModuleAsset;
 
-use yii\widgets\DetailView;
-use app\modules\resume\widgets\topMenu\TopMenuWidget;
+ModuleAsset::register($this);
 
-$this->title = 'Просмотр резюме';
+$this->title = 'Резюме '.$model->title;
 ?>
 
-<?= TopMenuWidget::widget() ?>
+<?= $this->render('breadcrumbBlock') ?>
 
 <div class="resume-view">
-    <h1><?= $this->title ?></h1>
+    <h1><?= $model->title ?></h1>
+    <p><?= $model->description ?></p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'title',
-            'description',
-            [
-                'label' => 'Список компетенций',
-                'format' => 'raw',
-                'value' => function($model, $widget) {
-                    $html = '';
-                    /* @var $resumeCompetence \app\modules\resume\models\ResumeCompetence */
-                    foreach ($model->resumeCompetencies as $resumeCompetence) {
-                        $html .= '<tr>' .
-                                '<td>' . $resumeCompetence->raiting . '</td>' .
-                                '<td>' . $resumeCompetence->title . '</td>' .
-                                '</tr>';
-                    }
-                    return $html ? '<table class="table"><tr><td>Оценка</td><td>Навык</td></tr>' . $html . '</table>' : null;
-                }
-            ]
-        ],
-    ]);
-    ?>
+    <?php if (is_array($model->resumeCompetencies) && count($model->resumeCompetencies) > 0): ?>
+        <h3>Компетенции</h3>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>Навык</th>
+                <th class="raiting">Оценка</th>
+            </tr>
+            <?php foreach ($model->resumeCompetencies as $resumeCompetence) { ?>
+                <tr>
+                    <td><?= $resumeCompetence->title ?></td>
+                    <td class="raiting"><?= $resumeCompetence->raiting ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+   <?php endif; ?>
 </div>   

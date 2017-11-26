@@ -12,17 +12,14 @@ var moduleResume = {
             $(this).off().on('input', function (e) {
                 moduleResume.onResumeCompetenceInput(e.target);
             });
-            //todo
-            $(this).blur(function (e) {
-                setTimeout(function(){
-                    moduleResume.closeSuggestionList(e.target);
-                }, 200);
+            $(this).on('blur', function (e) {
+                moduleResume.closeSuggestionList(e.target);
             });
         });
     },
-    addCompentenceToResume: function(){
+    addCompentenceToResume: function(){ 
         $('.resume-update .blank-competence-form .resume-competence-item').clone().appendTo( ".resume-competencies" );
-        setTimeout(function(){
+        setTimeout(function(){ 
             moduleResume.initCompetenceListeners();
         }, 0);
     },
@@ -40,15 +37,50 @@ var moduleResume = {
             counter++;
         }
     },
-    compentenceAutoCompliterList: [],
+    compentenceSuggestionUrl: '',
+    compentenceSuggestionCache: {},
+    compentenceSuggestionMinLen: 0,
+    compentenceSuggestionMaxLen: 0,
+    compentenceAutoCompliterList: {},
+    configureSuggestion: function(url, min, max){
+        moduleResume.compentenceSuggestionUrl = url;
+        moduleResume.compentenceSuggestionMinLen = min;
+        moduleResume.compentenceSuggestionMaxLen = max;
+    },
     onResumeCompetenceInput: function(input){
+        if(input.value && input.value.length >= moduleResume.compentenceSuggestionMinLen){
+            var q = input.value.substring(0, moduleResume.compentenceSuggestionMaxLen);
+            if(!moduleResume.compentenceSuggestionCache[q]){
+                $.ajax({
+                    type: 'GET', 
+                    contentType: 'application/json', 
+                    url: moduleResume.compentenceSuggestionUrl, 
+                    data: {
+                        q: q
+                    }, 
+                    success: function (data) {
+                        moduleResume.compentenceSuggestionCache[q] = true;
+                        if (data && Array.isArray(data)) {
+                            for (var i = 0; i < data.length; i++) {
+                                if (!moduleResume.compentenceAutoCompliterList[data[i].title]) {
+                                    moduleResume.compentenceAutoCompliterList[data[i].title] = data[i];
+                                }
+                            }
+                        }
+                        moduleResume.recognizeSuggestion(input);
+                    }});
+            }
+        }
         moduleResume.recognizeSuggestion(input);
     },
     recognizeSuggestion: function(input){
+        if(!$(input).is(':focus')){
+            return;
+        }
+        
         var suggestionList = [];
         if(moduleResume.compentenceAutoCompliterList){
-            for (var i = 0; i < moduleResume.compentenceAutoCompliterList.length; i++) {
-                var autoCompliterObj = moduleResume.compentenceAutoCompliterList[i];
+            $.each(moduleResume.compentenceAutoCompliterList, function(key, autoCompliterObj){
                 if (input.value 
                         && input.value.length > 1 
                         && autoCompliterObj 
@@ -56,7 +88,7 @@ var moduleResume = {
                         && autoCompliterObj.title !== input.value) {
                     suggestionList.push(autoCompliterObj);
                 }
-            }
+            });
         }
         
         moduleResume.drawSuggestionList(input, suggestionList);
@@ -73,23 +105,28 @@ var moduleResume = {
             return;
         }
         
-        var ul = $(input.parentNode).find('.update-resume-suggestions');
-        if(ul.length === 0){
-            ul = $(document.createElement('ul'));
-            ul.addClass('update-resume-suggestions');
-            ul.appendTo($(input.parentNode));
+        var listItems = $(input.parentNode).find('.update-resume-suggestions .items');
+        if(listItems.length === 0){
+            var listBlock = $(document.createElement('div'));
+            listBlock.addClass('update-resume-suggestions');
+            listBlock.appendTo($(input.parentNode));
+            listItems = $(document.createElement('div'));
+            listItems.addClass('items');
+            listItems.appendTo(listBlock);
         } else {
-            ul.empty();
+            listItems.empty();
         }
         
         for(var i=0;i < suggestionList.length;i++){
-            li = $(document.createElement('li'));
-            li.html(suggestionList[i].title);
-            li.off().on('click', {input: input, title: suggestionList[i].title}, function (e) {
+            listItem = $(document.createElement('span'));
+            listItem.html(suggestionList[i].title);
+            listItem.off().on('mousedown', function (e) {
+                e.preventDefault();
+            }).on('click', {input: input, title: suggestionList[i].title}, function (e) {
                 e.data.input.value = e.data.title;
                 moduleResume.closeSuggestionList(e.data.input);
             });
-            li.appendTo(ul);
+            listItem.appendTo(listItems);
         }
     }
 }

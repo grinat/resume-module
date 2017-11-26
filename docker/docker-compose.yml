@@ -35,12 +35,12 @@ services:
       - POSTGRES_PASSWORD=Pos_251^73vwuOpx
     volumes:
 # Для linux
-#      - ${MAIN_PATH}/docker/data/postgresql:/var/lib/postgresql/data
+      - ${MAIN_PATH}/docker/data/postgresql:/var/lib/postgresql/data
 # Для linux end
 # Для windows
 # 1. docker volume create --name postgres-data-resume-web-service -d local
 # 2. - postgres-data-resume-web-service:/var/lib/postgresql/data
-      - postgres-data-resume-web-service:/var/lib/postgresql:Z
+#      - postgres-data-resume-web-service:/var/lib/postgresql:Z
 # Для windows end
       - ${MAIN_PATH}/docker/logs/postgresql:/var/log/postgresql
     networks:
@@ -50,6 +50,6 @@ networks:
   
 volumes:
 # Для windows
-  postgres-data-resume-web-service:
-    external: true
+#  postgres-data-resume-web-service:
+#    external: true
 # Для windows end
