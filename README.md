@@ -32,42 +32,20 @@ php /var/www/html/yii migrate --migrationPath=@app/modules/resume/migrations
 
 1. Перейти в /docker
 
-2. Сменить путь в .env
-
-3. Если windows, то выполнить:
+2. Выполнить:
 ~~~
-docker volume create --name postgres-data-resume-web-service -d local
+docker volume create --name=postgres-data-resume-web-service
 ~~~
-И закомментировать/удалить все где указано # Для Linux и расскоментировать # Для Windows в docker-compose.yml
 
-4. 
+3. Запустить
 ~~~
 docker-compose up
 ~~~
 
-5. Приложение будет на 3001 порту
+4. Приложение будет на 3001 порту
 
-6. Установить зависимости через composer
-
-
-CONFIGURATION
--------------
-
-### Database
-
-Edit the file `config/db.php` with real data, for example:
-
-```php
-return [
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '1234',
-    'charset' => 'utf8',
-];
-```
-
-**NOTES:**
-- Yii won't create the database for you, this has to be done manually before you can access it.
-- Check and edit the other files in the `config/` directory to customize your application as required.
-- Refer to the README in the `tests` directory for information specific to basic application tests.
+5. Установить зависимости через composer и выполнить миграции:
+~~~
+docker exec -ti resume-web-service-php sh -c "cd /var/www/html && php /usr/bin/composer install"
+docker exec -ti resume-web-service-php sh -c "php /var/www/html/yii migrate --interactive=0 --migrationPath=@app/modules/resume/migrations"
+~~~

@@ -2,7 +2,10 @@ FROM alpine:edge
 
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
     apk --update add \
+        git \
+        curl \
         php7 \
+        php7-phar \
         php7-dom \
         php7-curl \
         php7-fileinfo \
@@ -32,6 +35,10 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
 
 COPY php.ini /etc/php7/conf.d/50-setting.ini
 COPY php-fpm.conf /etc/php7/php-fpm.conf
+
+# установка композера
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+ENV PATH /root/.composer/vendor/bin:$PATH
 
 EXPOSE 8000
 
